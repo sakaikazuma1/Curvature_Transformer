@@ -1,0 +1,28 @@
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      # Without a .env, the shell's UID/GID are not exported, so fall back to 1000.
+      args:
+        UID: ${UID:-1000}
+        GID: ${GID:-1000}
+    user: "${UID:-1000}:${GID:-1000}"
+    volumes:
+      - ./:/app:cached
+      # Share the host's Claude Code / Codex login and settings.
+      - ${HOME}/.claude:/home/user/.claude
+      - ${HOME}/.claude.json:/home/user/.claude.json
+      - ${HOME}/.codex:/home/user/.codex
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+    working_dir: /app
+    tty: true
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]

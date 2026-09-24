@@ -1,0 +1,9 @@
+{
+  "name": "curvature-transformer",
+  "dockerComposeFile": ["../compose.yml"],
+  "service": "app",
+  "workspaceFolder": "/app",
+  "remoteUser": "user",
+  "updateRemoteUserUID": true,
+  "overrideCommand": true
+}
